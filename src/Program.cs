@@ -31,8 +31,9 @@ public class Program
 
     app.MapPatch("/chef/{id}", async (string id, Cuisine[] cuisines) => await chefDB.AddCuisine(id, cuisines)).Produces<Object>();
 
+    app.MapGet("/chisine/", async () => await chefDB.CuisinesInUse()).Produces<IEnumerable<string>>();
 
-    app.MapGet("/chef/cuisine/{cuisine}", async (Cuisine cuisine) => await chefDB.Some( chef => chef.Cuisines.Any(item=> item ==cuisine))
+    app.MapGet("/chef/cuisine/{cuisine}", async (Cuisine cuisine) => await chefDB.Some(chef => chef.Cuisines.Any(item => item == cuisine))
     ).Produces<List<Chef>>();
 
 

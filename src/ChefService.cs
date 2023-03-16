@@ -39,4 +39,11 @@ internal class ChefService
     var scribble = Builders<Chef>.Update.AddToSetEach(c => c.Cuisines, cuisines);
     return await _Chefs.UpdateOneAsync(c => c.Name == name, scribble);
   }
+
+  public async Task<IEnumerable<string>> CuisinesInUse()
+  {
+    return (await _Chefs.Aggregate<Chef>()
+                .Unwind(i => i.Cuisines)
+                .Group(new BsonDocument { { "_id", "$Cuisines" } }).ToListAsync()).Select(b => (string)b["_id"]);
+  }
 }
