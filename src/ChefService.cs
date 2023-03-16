@@ -5,12 +5,9 @@ internal class ChefService
 
   public ChefService(String url) => this._Chefs = new MongoUrl(url).Collection<Chef>();
 
-
   public async Task<Chef> One(Expression<Func<Chef, bool>> filter) => await this._Chefs.Find(filter).FirstOrDefaultAsync();
 
-
   public async Task<IEnumerable<Chef>> Some(Expression<Func<Chef, bool>> filter) => await this._Chefs.Find(filter).ToListAsync();
-
 
   public async Task<IResult> Create(Chef chef)
   {
@@ -42,8 +39,4 @@ internal class ChefService
     var scribble = Builders<Chef>.Update.AddToSetEach(c => c.Cuisines, cuisines);
     return await _Chefs.UpdateOneAsync(c => c.Name == name, scribble);
   }
-
-  public async Task<IEnumerable<Chef>> SomeByCuisine(Cuisine cuisine) => await this._Chefs.Find<Chef>(
-    chef => chef.Cuisines.Any(
-      current => current == cuisine)).ToListAsync();
 }
